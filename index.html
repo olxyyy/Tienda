@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TIENDA</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -207,10 +206,6 @@
   </div>
 
   <script>
-    const SUPABASE_URL = "https://qbtiqozyowspyvfodtgq.supabase.co";
-    const SUPABASE_KEY = "eyJhGciOiJIUzI1NiIsInI5cCCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFidGlxb3p5b3dzcHl2Zm9kdGdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5ODIzOTQsImV4cCI6MjA5NTU1ODM5NH0.ZubX0Wb9V26J_G06wzPXZ8sI4n5sXWk4wWf5S4vN3Zk";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
     const items = [
       {
         id: "objeto_1",
@@ -234,7 +229,7 @@
         id: "objeto_4",
         name: "TORTA DE JAMÓN SELLADA AL VACÍO DE 2004",
         price: 85,
-        image: "objeto4.jpg"
+        image: "objeto4.png"
       },
       {
         id: "objeto_5",
@@ -294,7 +289,7 @@
       });
     }
 
-    async function handleBuy(itemId) {
+    function handleBuy(itemId) {
       const item = items.find(i => i.id === itemId);
       if (!item) return;
 
@@ -302,26 +297,10 @@
       renderGrid();
       renderInventory();
 
-      const payload = {
-        item_id: item.id,
-        item_name: item.name,
-        price: item.price,
-        status: 'purchased',
-        timestamp: new Date().toISOString()
-      };
-
-      const { data, error } = await supabase
-        .from('compras')
-        .insert([payload]);
-
-      if (error) {
-        console.error("Error al registrar compra:", error);
-      } else {
-        console.log("Compra guardada en Supabase:", data);
-      }
+      console.log("Comprado localmente:", item.name);
     }
 
-    async function handleRefund(itemId) {
+    function handleRefund(itemId) {
       const item = items.find(i => i.id === itemId);
       if (!item) return;
 
@@ -329,23 +308,7 @@
       renderGrid();
       renderInventory();
 
-      const payload = {
-        item_id: item.id,
-        item_name: item.name,
-        price: item.price,
-        status: 'refunded',
-        timestamp: new Date().toISOString()
-      };
-
-      const { data, error } = await supabase
-        .from('compras')
-        .insert([payload]);
-
-      if (error) {
-        console.error("Error al registrar reembolso:", error);
-      } else {
-        console.log("Reembolso guardado en Supabase:", data);
-      }
+      console.log("Reembolsado localmente:", item.name);
     }
 
     renderGrid();
