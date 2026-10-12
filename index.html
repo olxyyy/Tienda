@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TIENDA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background-color: #000000;
+      color: #ffffff;
+      font-family: 'Press Start 2P', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 10px;
+      min-height: 100vh;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .tenna-gif-container {
+      width: 320px;
+      height: 90px;
+      border: 2px dashed #ff00ff;
+      background-color: #111111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .tenna-gif-container img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .shop-subtitle {
+      color: #00ff00;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      width: 100%;
+      max-width: 900px;
+      margin-bottom: 40px;
+    }
+
+    .prize-card {
+      border: 3px solid #ff0000;
+      background-color: #000000;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .image-container {
+      width: 100%;
+      height: 140px;
+      background-color: #111111;
+      border: 1px dashed #444444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .prize-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .prize-title {
+      font-size: 0.6rem;
+      color: #ffffff;
+      text-align: center;
+      line-height: 1.3;
+      margin-bottom: 8px;
+      min-height: 35px;
+      display: flex;
+      align-items: center;
+    }
+
+    .prize-price {
+      font-size: 0.75rem;
+      color: #00ff00;
+      margin-bottom: 10px;
+    }
+
+    .btn-buy {
+      background-color: #ff0000;
+      color: #ffffff;
+      border: none;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.6rem;
+      padding: 8px 12px;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 2px 2px #880000;
+    }
+
+    .btn-buy:active {
+      transform: translate(2px, 2px);
+      box-shadow: none;
+    }
+
+    .btn-buy.owned {
+      background-color: #444444;
+      color: #888888;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .inventory-section {
+      width: 100%;
+      max-width: 900px;
+      border: 2px solid #ffff00;
+      padding: 15px;
+      background-color: #050505;
+    }
+
+    .inventory-title {
+      font-size: 0.9rem;
+      color: #ffff00;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .inventory-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .inventory-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #333333;
+      padding: 8px 12px;
+      background-color: #111111;
+      font-size: 0.6rem;
+    }
+
+    .btn-refund {
+      background-color: #00ffff;
+      color: #000000;
+      border: none;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.55rem;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-refund:hover {
+      background-color: #ffffff;
+    }
+
+    .empty-msg {
+      font-size: 0.6rem;
+      color: #666666;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="tenna-gif-container">
+      <img src="titulo.gif" alt="GIF de Texto">
+    </div>
+    <div class="shop-subtitle">TIENDA</div>
+  </div>
+
+  <div class="grid-container" id="prizes-grid"></div>
+
+  <div class="inventory-section">
+    <div class="inventory-title">INVENTARIO</div>
+    <div class="inventory-list" id="inventory-list">
+      <div class="empty-msg">VACÍO</div>
+    </div>
+  </div>
+
+  <script>
+    const items = [
+      {
+        id: "objeto_1",
+        name: "GELATINA DE SALCHICHA TIBIA",
+        price: 45,
+        image: "objeto1.jpg"
+      },
+      {
+        id: "objeto_2",
+        name: "FRASCO CON DIENTE ENCONTRADO EN EL METRO",
+        price: 120,
+        image: "objeto2.jpg"
+      },
+      {
+        id: "objeto_3",
+        name: "OJITO DE CRISTAL QUE TE MIRA FIJAMENTE",
+        price: 250,
+        image: "objeto3.jpg"
+      },
+      {
+        id: "objeto_4",
+        name: "TORTA DE JAMÓN SELLADA AL VACÍO DE 2004",
+        price: 85,
+        image: "objeto4.png"
+      },
+      {
+        id: "objeto_5",
+        name: "CALCETÍN SOLITARIO SIEMPRE HÚMEDO",
+        price: 30,
+        image: "objeto5.png"
+      }
+    ];
+
+    const purchasedIds = new Set();
+
+    function renderGrid() {
+      const grid = document.getElementById('prizes-grid');
+      grid.innerHTML = '';
+
+      items.forEach(item => {
+        const isOwned = purchasedIds.has(item.id);
+        const card = document.createElement('div');
+        card.className = 'prize-card';
+
+        card.innerHTML = `
+          <div class="image-container">
+            <img src="${item.image}" alt="${item.name}" class="prize-img">
+          </div>
+          <div class="prize-title">${item.name}</div>
+          <div class="prize-price">${item.price} KROMER</div>
+          <button 
+            class="btn-buy ${isOwned ? 'owned' : ''}" 
+            onclick="handleBuy('${item.id}')"
+            ${isOwned ? 'disabled' : ''}
+          >
+            ${isOwned ? 'ADQUIRIDO' : 'COMPRAR'}
+          </button>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function renderInventory() {
+      const list = document.getElementById('inventory-list');
+      if (purchasedIds.size === 0) {
+        list.innerHTML = '<div class="empty-msg">VACÍO</div>';
+        return;
+      }
+
+      list.innerHTML = '';
+      items.forEach(item => {
+        if (purchasedIds.has(item.id)) {
+          const row = document.createElement('div');
+          row.className = 'inventory-item';
+          row.innerHTML = `
+            <span>${item.name} - ${item.price} KROMER</span>
+            <button class="btn-refund" onclick="handleRefund('${item.id}')">REEMBOLSAR</button>
+          `;
+          list.appendChild(row);
+        }
+      });
+    }
+
+    function handleBuy(itemId) {
+      const item = items.find(i => i.id === itemId);
+      if (!item) return;
+
+      purchasedIds.add(itemId);
+      renderGrid();
+      renderInventory();
+
+      const payload = {
+        item_id: item.id,
+        item_name: item.name,
+        price: item.price,
+        status: 'purchased',
+        timestamp: new Date().toISOString()
+      };
+
+      console.log("Comprado:", payload);
+    }
+
+    function handleRefund(itemId) {
+      const item = items.find(i => i.id === itemId);
+      if (!item) return;
+
+      purchasedIds.delete(itemId);
+      renderGrid();
+      renderInventory();
+
+      const payload = {
+        item_id: item.id,
+        item_name: item.name,
+        price: item.price,
+        status: 'refunded',
+        timestamp: new Date().toISOString()
+      };
+
+      console.log("Reembolsado:", payload);
+    }
+
+    renderGrid();
+    renderInventory();
+  </script>
+</body>
+</html>
